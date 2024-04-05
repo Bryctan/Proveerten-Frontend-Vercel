@@ -32,6 +32,8 @@ export class UpdateOrderComponent {
       next: (response: any) => {
         this.data_order = response.order;
         this.order = response.order_detail;
+        console.log(this.order);
+        
         this.order.forEach(product => {
           product.individual_product_price = product.quantity * product.purchase_price_product;
           product.id_product = product.fk_id_product;
@@ -135,7 +137,7 @@ export class UpdateOrderComponent {
       this.list_show_products.push(product);
       product.stock_product += product.quantity;
     } else {
-      product.stock_product -= product.quantity;
+      //product.stock_product -= product.quantity;
       this.list_products_delete.push(product);
       const index = this.order.findIndex((p: any) => p.id_product === product.id_product);
       if (index !== -1) {
