@@ -1,0 +1,23 @@
+<div class="container">
+    
+    <div class="div" *ngIf="publications; else noPublications">
+        <table class="container" border=" 2px">
+            <tr>
+                <th>Publicación</th>
+            </tr>
+            <tr>
+                <div *ngFor="let publication of publications">
+                    <td>
+                       
+                        <img [src]="publication.secure_url" style="width: 100px; height: 100px;">
+                    </td>
+                </div>
+            </tr>
+        </table>
+    </div>
+</div>
+
+
+<ng-template #noPublications>
+    <p>No hay publicaciones</p>
+</ng-template>

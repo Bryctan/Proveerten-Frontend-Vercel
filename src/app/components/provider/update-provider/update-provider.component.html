@@ -1,0 +1,390 @@
+<div class="modal" *ngIf="loading">
+    <div class="modal-content">
+        <app-loader [loading]="loading"></app-loader>
+    </div>
+</div>
+
+<div class="d-flex justify-content-center m-5">
+    <div class="card shadow-lg bg-body-tertiary rounded p-5">
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+            <div class="d-flex flex-column gap-4">
+                <h1 style="color:#e66d3d ; text-align: center;">¡Actualiza el trabajador!</h1>
+
+                <div class="div">
+                    <label class="form-label" for="document_provider"><strong> Documento</strong></label>
+                    <input type="text" class="form-control" formControlName="document_provider" id="document_provider">
+                </div>
+                <div class="d-flex justify-content-between">
+                    <div class="div">
+                        <label class="form-label" for="name_provider"><strong> Nombre proveedor</strong></label>
+                        <input type="text" class="form-control" formControlName="name_provider" id="name_provider">
+
+                        <div *ngIf="form.get('name_provider')?.hasError('required')" class="message-invalid">
+                            <p>El Nombre es requerido.</p>
+                        </div>
+
+                        <div *ngIf="form.get('name_provider')?.hasError('minlength') || form.get('name_provider')?.hasError('maxlength')"
+                            class="message-invalid">
+                            El Nombre debe tener entre 1 a maximo 50 carácteres
+                        </div>
+                    </div>
+                    <div class="div">
+                        <label class="form-label" for="last_name_provider"><strong> Apellido proveedor</strong></label>
+                        <input type="text" class="form-control" formControlName="last_name_provider"
+                            id="last_name_provider">
+
+                        <div *ngIf="form.get('last_name_provider')?.hasError('required')" class="message-invalid">
+                            <p>El apellido es requerido.</p>
+                        </div>
+
+                        <div *ngIf="form.get('last_name_provider')?.hasError('minlength') || form.get('last_name_provider')?.hasError('maxlength')"
+                            class="message-invalid">
+                            <p>El apellido debe tener entre 1 a maximo 40 carácteres</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="div">
+                    <label class="form-label" for="email_provider"><strong> Correo proveedor</strong></label>
+                    <input type="text" class="form-control" formControlName="email_provider" id="email_provider">
+
+                    <div *ngIf="form.get('email_provider')?.hasError('required')" class="message-invalid">
+                        <p class="error-message">El email es un campo requerido.</p>
+                    </div>
+
+                    <div *ngIf="form.get('email_provider')?.hasError('email')" class="message-invalid">
+                        <p>Ingrese un correo valido</p>
+                    </div>
+                </div>
+
+
+                <div class="d-flex justify-content-between">
+                    <div class="div">
+                        <label class="form-label" for="number_provider"><strong>Numero del proveedor</strong></label>
+                        <input type="text" class="form-control" formControlName="number_provider" id="number_provider">
+
+
+                        <div *ngIf="form.get('number_provider')?.hasError('required')" class="message-invalid">
+                            <p>El numero es requerido.</p>
+                        </div>
+
+                        <div *ngIf="form.get('number_provider')?.hasError('minlength') || form.get('number_provider')?.hasError('maxlength')"
+                            class="message-invalid">
+                            <p> El numero debe tener entre 1 a maximo 15 carácteres</p>
+                        </div>
+                    </div>
+
+                    <div class="div">
+                        <label for="exampleFormControlTextarea1"
+                            class="form-label"><strong>Departamento</strong></label>
+                        <select formControlName="department" (click)="click()" class="form-control form-control-lg"
+                            (ngModelChange)="selected_department($event)">
+                            <option value="" disabled selected>Seleccionar</option>
+                            <option *ngFor="let department of departments" [ngValue]="department.name">
+                                {{ department.name }}
+                            </option>
+                        </select>
+
+                        <div *ngIf="form.get('department')?.hasError('required')" class="message-invalid">
+                            <p>El departamento es requerido.</p>
+                        </div>
+                    </div>
+
+                    <div class="div">
+                        <label for="exampleFormControlTextarea1" class="form-label"><strong>Municipio</strong></label>
+                        <select formControlName="city_provider" class="form-control form-control-lg">
+                            <option value="" disabled selected>Seleccionar</option>
+                            <option *ngFor="let city of cities" [value]="city.name">{{
+                                city.name }}</option>
+                        </select>
+
+                        <div *ngIf="form.get('city_provider')?.hasError('required')" class="message-invalid">
+                            <p>La ciudad es requrida.</p>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <div class="div">
+                        <label class="form-label" for="neighborhood"><strong> Barrio</strong></label>
+                        <input type="text" class="form-control" formControlName="neighborhood" id="neighborhood">
+
+                        <div *ngIf="form.get('neighborhood')?.hasError('required')" class="message-invalid">
+                            <p>El Barrio es requerido.</p>
+                        </div>
+
+                        <div *ngIf="form.get('neighborhood')?.hasError('minlength') || form.get('neighborhood')?.hasError('maxlength')"
+                            class="message-invalid">
+                            <p> El barrio debe tener entre 4 a maximo 40 carácteres</p>
+                        </div>
+                    </div>
+                    <div class="div">
+                        <label class="form-label" for="street"><strong>Calle</strong></label>
+                        <input type="text" class="form-control" formControlName="street" id="street">
+
+                        <div *ngIf="form.get('street')?.hasError('required')" class="message-invalid">
+                            <p>La calle es requerida.</p>
+                        </div>
+
+                        <div *ngIf="form.get('street')?.hasError('minlength') || form.get('street')?.hasError('maxlength')"
+                            class="message-invalid">
+                            <p> La calle debe tener entre 1 a maximo 25 carácteres</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="div">
+                    <label class="form-label" for="number_street"><strong> Numero de calle</strong></label>
+                    <input type="text" class="form-control" formControlName="number_street" id="number_street">
+
+                    <div *ngIf="form.get('number_street')?.hasError('number_street')" class="message-invalid">
+                        <p>El numero de calle es requerido.</p>
+                    </div>
+
+                    <div *ngIf="form.get('number_street')?.hasError('minlength') || form.get('number_street')?.hasError('maxlength')"
+                        class="message-invalid">
+                        <p> El numero de calle debe tener entre 1 a maximo 15 carácteres</p>
+                    </div>
+                </div>
+
+                <div class="d-flex gap-2 justify-content-center">
+                    <p-toast position="bottom-right" key="center"></p-toast>
+                    <button class="btn btn-primary" type="submit"><svg xmlns="http://www.w3.org/2000/svg" width="16"
+                            height="16" fill="currentColor" class="bi bi-envelope-arrow-up" viewBox="0 0 16 16">
+                            <path
+                                d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4.5a.5.5 0 0 1-1 0V5.383l-7 4.2-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h5.5a.5.5 0 0 1 0 1H2a2 2 0 0 1-2-1.99zm1 7.105 4.708-2.897L1 5.383zM1 4v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1" />
+                            <path
+                                d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m.354-5.354 1.25 1.25a.5.5 0 0 1-.708.708L13 12.207V14a.5.5 0 0 1-1 0v-1.717l-.28.305a.5.5 0 0 1-.737-.676l1.149-1.25a.5.5 0 0 1 .722-.016" />
+                        </svg> Enviar</button>
+                    <button type="button" (click)="cancel()" class="btn btn-danger"><svg
+                            xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            class="bi bi-x-octagon" viewBox="0 0 16 16">
+                            <path
+                                d="M4.54.146A.5.5 0 0 1 4.893 0h6.214a.5.5 0 0 1 .353.146l4.394 4.394a.5.5 0 0 1 .146.353v6.214a.5.5 0 0 1-.146.353l-4.394 4.394a.5.5 0 0 1-.353.146H4.893a.5.5 0 0 1-.353-.146L.146 11.46A.5.5 0 0 1 0 11.107V4.893a.5.5 0 0 1 .146-.353zM5.1 1 1 5.1v5.8L5.1 15h5.8l4.1-4.1V5.1L10.9 1z" />
+                            <path
+                                d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708" />
+                        </svg> Cancelar</button>
+                </div>
+            </div>
+        </form>
+
+        <form [formGroup]="formPassword" (ngSubmit)="onSubmitPassword()">
+            <div class="d-flex flex-column gap-3">
+                <div class="div">
+                    <label class="form-label" for="password_provider"><strong>Password</strong></label>
+                    <input type="password" class="form-control" formControlName="password_provider"
+                        id="password_provider">
+
+                    <div *ngIf="form.get('password_provider')?.hasError('minlength') || form.get('password_provider')?.hasError('maxlength')"
+                        class="message-invalid">
+                        <p>La contraseña debe tener entre 1 a maximo 40 carácteres</p>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-center">
+                    <button class="btn btn-primary" type="submit"><svg xmlns="http://www.w3.org/2000/svg" width="16"
+                            height="16" fill="currentColor" class="bi bi-envelope-arrow-up" viewBox="0 0 16 16">
+                            <path
+                                d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4.5a.5.5 0 0 1-1 0V5.383l-7 4.2-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h5.5a.5.5 0 0 1 0 1H2a2 2 0 0 1-2-1.99zm1 7.105 4.708-2.897L1 5.383zM1 4v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1" />
+                            <path
+                                d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m.354-5.354 1.25 1.25a.5.5 0 0 1-.708.708L13 12.207V14a.5.5 0 0 1-1 0v-1.717l-.28.305a.5.5 0 0 1-.737-.676l1.149-1.25a.5.5 0 0 1 .722-.016" />
+                        </svg> Enviar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- <div class="container d-flex justify-content-center align-items-center">
+
+    <div border>
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+            <div>
+                <label for="document_provider">Document:</label>
+                <input id="document_provider" type="text" formControlName="document_provider">
+            </div>
+
+            <div>
+                <label for="name_provider">Name Provider:</label>
+                <input id="name_provider" type="text" formControlName="name_provider">
+            </div>
+
+            <div>
+                <label for="last_name_provider">Last Name Provider:</label>
+                <input id="last_name_provider" type="text" formControlName="last_name_provider">
+            </div>
+
+            <div>
+                <label for="email_provider">Email Provider:</label>
+                <input id="email_provider" type="text" formControlName="email_provider">
+            </div>
+            <div>
+                <label for="number_provider">Number Provider:</label>
+                <input id="number_provider" type="text" formControlName="number_provider">
+            </div>
+
+            <div>
+                <label for="city_provider">City Provider:</label>
+                <input id="city_provider" type="text" formControlName="city_provider">
+            </div>
+
+            <div>
+                <label for="neighborhood">Neighborhood:</label>
+                <input id="neighborhood" type="text" formControlName="neighborhood">
+            </div>
+
+            <div>
+                <label for="street">Street:</label>
+                <input id="street" type="text" formControlName="street">
+            </div>
+
+            <div>
+                <label for="number_street">Number Street:</label>
+                <input id="number_street" type="text" formControlName="number_street">
+            </div>
+            <p-toast position="bottom-right" key="center"></p-toast>
+            <button type="submit">Enviar</button>
+        </form>
+    </div>
+
+    <div>
+        <form [formGroup]="formPassword" (ngSubmit)="onSubmitPassword()">
+            <div>
+                <label for="password_provider">Password Provider:</label>
+                <input id="password_provider" type="text" formControlName="password_provider">
+            </div>
+            <button type="submit">Enviar</button>
+        </form>
+    </div>
+</div>
+<button (click)="cancel()">Cancelar</button> -->
+
+<!--
+<div class="container d-flex justify-content-center align-items-center">
+  <div class="card p-4">
+      <h5 class="text-center mb-4">Información del Proveedor</h5>
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+          <div class="form-group">
+              <label for="document_provider">Documento:</label>
+              <input id="document_provider" type="text" class="form-control" formControlName="document_provider">
+          </div>
+
+          <div class="form-group">
+              <label for="name_provider">Nombre del Proveedor:</label>
+              <input id="name_provider" type="text" class="form-control" formControlName="name_provider">
+          </div>
+
+          <div class="form-group">
+              <label for="last_name_provider">Apellido del Proveedor:</label>
+              <input id="last_name_provider" type="text" class="form-control" formControlName="last_name_provider">
+          </div>
+
+          <div class="form-group">
+              <label for="email_provider">Email del Proveedor:</label>
+              <input id="email_provider" type="text" class="form-control" formControlName="email_provider">
+          </div>
+          <div class="form-group">
+              <label for="number_provider">Número del Proveedor:</label>
+              <input id="number_provider" type="text" class="form-control" formControlName="number_provider">
+          </div>
+
+          <div class="form-group">
+              <label for="city_provider">Ciudad del Proveedor:</label>
+              <input id="city_provider" type="text" class="form-control" formControlName="city_provider">
+          </div>
+
+          <div class="form-group">
+              <label for="neighborhood">Barrio:</label>
+              <input id="neighborhood" type="text" class="form-control" formControlName="neighborhood">
+          </div>
+
+          <div class="form-group">
+              <label for="street">Calle:</label>
+              <input id="street" type="text" class="form-control" formControlName="street">
+          </div>
+
+          <div class="form-group">
+              <label for="number_street">Número de la Calle:</label>
+              <input id="number_street" type="text" class="form-control" formControlName="number_street">
+          </div>
+          <div class="text-center">
+              <p-toast position="bottom-right" key="center"></p-toast>
+              <button type="submit" class="btn btn-primary">Enviar</button>
+          </div>
+      </form>
+  </div>
+
+  <div class="ml-4">
+      <div class="card p-4">
+          <h5 class="text-center mb-4">Cambiar Contraseña</h5>
+          <form [formGroup]="formPassword" (ngSubmit)="onSubmitPassword()">
+              <div class="form-group">
+                  <label for="password_provider">Contraseña del Proveedor:</label>
+                  <input id="password_provider" type="text" class="form-control" formControlName="password_provider">
+              </div>
+              <div class="text-center">
+                  <button type="submit" class="btn btn-primary">Enviar</button>
+              </div>
+          </form>
+      </div>
+  </div>
+</div>
+
+<div class="container mt-3 text-center">
+  <button class="btn btn-danger" (click)="cancel()">Cancelar</button>
+</div>
+ -->
+
+
+<!-- <div class="container p-5 col-md-6">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="form-header">
+            <h2>Actualizar</h2>
+        </div>
+        <div class="form-body">
+            <fieldset>
+                <legend><i class="fa fa-user"></i> User Information</legend>
+                <label for="document_provider">Document:</label>
+                <input id="document_provider" type="text" formControlName="document_provider">
+
+                <label for="name_provider">Name Provider:</label>
+                <input id="name_provider" type="text" formControlName="name_provider">
+
+                <label for="last_name_provider">Last Name Provider:</label>
+                <input id="last_name_provider" type="text" formControlName="last_name_provider">
+
+                <label for="email_provider">Email Provider:</label>
+                <input id="email_provider" type="text" formControlName="email_provider">
+
+                <label for="number_provider">Number Provider:</label>
+                <input id="number_provider" type="text" formControlName="number_provider">
+
+                <label for="city_provider">City Provider:</label>
+                <input id="city_provider" type="text" formControlName="city_provider">
+
+                <label for="neighborhood">Neighborhood:</label>
+                <input id="neighborhood" type="text" formControlName="neighborhood">
+
+                <label for="street">Street:</label>
+                <input id="street" type="text" formControlName="street">
+
+                <label for="number_street">Number Street:</label>
+                <input id="number_street" type="text" formControlName="number_street">
+
+                <label for="password_provider">Password Provider:</label>
+                <input id="password_provider" type="text" formControlName="password_provider">
+            </fieldset>
+            <fieldset>
+                <form class="" [formGroup]="formPassword" (ngSubmit)="onSubmitPassword()">
+                    <div class="form-footer p-5">
+                        <input type="submit" value="Enviar">
+                    </div>
+                </form>
+            </fieldset>
+        </div>
+        <div class="form-footer text-center ">
+            <input  type="submit" value="Actualizar">
+            <input (click)="cancel()" type="submit" value="Cancelar">
+        </div>
+    </form>
+</div> -->

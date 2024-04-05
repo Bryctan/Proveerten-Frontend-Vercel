@@ -1,0 +1,7 @@
+<div *ngIf="auth.isCompany() | async">
+    <app-update-profile-company></app-update-profile-company>
+</div>
+
+<div *ngIf="auth.isGrocer() | async">
+    <app-update-profile-grocer></app-update-profile-grocer>
+</div>

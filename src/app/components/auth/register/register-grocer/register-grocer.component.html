@@ -1,0 +1,238 @@
+<!-- <div class="content">
+    <div class="form">
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+            <input type="text" formControlName="document_grocer" placeholder="Documento">
+            <input type="text" formControlName="name_grocer" placeholder="Nombres">
+            <input type="text" formControlName="last_name_grocer" placeholder="Apellidos">
+            <input type="email" formControlName="email_grocer" placeholder="Correo electrónico">
+
+            <input type="password" formControlName="password_grocer" placeholder="Contraseña">
+
+            <input type="tel" formControlName="number_grocer" placeholder="Número de celular">
+            <input type="text" formControlName="name_store" placeholder="Nombre del establecimiento">
+            <input type="text" formControlName="city_grocer" placeholder="Ciudad - Pueblo">
+            <input type="text" formControlName="neighborhood" placeholder="Barrio">
+            <input type="text" formControlName="street" placeholder="Calle">
+            <input type="text" formControlName="number_street" placeholder="Número">
+            <input type="text" formControlName="apartment" placeholder="Apartamento">
+            <button type="submit">Enviar</button>
+        </form>
+    </div>
+</div> -->
+
+<div class="content">
+    <div class="form">
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+            <section class="">
+                <div class="container py-3">
+                    <div class="row d-flex align-items-center justify-content-center  rounded">
+                        <div class="col-md-8 col-lg-7 col-xl-6">
+                            <img style="width: 700px;" src="../../../../../assets/register.png" class="img-fluid"
+                                alt="Phone image">
+                        </div>
+                        <div class=" col-xl-5 offset-xl-1 m-4  ">
+                            <div class="d-flex fs-1 justify-content-center mb-3">
+                                <h1 style="color: #e66d3d;">Registrate como tendero</h1>
+                            </div>
+
+                            <!-- Email input -->
+
+                            <div class="form-outline mb-4">
+                                <label class="form-label" for="form1Example13"><strong>Nombres</strong></label>
+                                <input type="text" formControlName="name_grocer" class="form-control form-control-lg" />
+
+                                <div *ngIf="form.get('name_grocer').errors?.['required'] && form.get('name_grocer').touched"
+                                    class="message-invalid">
+                                    <p style="color: red;">El nombre es requerido.</p>
+                                </div>
+
+                            </div>
+
+                            <div class="form-outline mb-4">
+                                <label class="form-label" for="form1Example13"><strong>Apellidos</strong></label>
+                                <input type="text" formControlName="last_name_grocer"
+                                    class="form-control form-control-lg" />
+
+                                <div *ngIf="form.get('last_name_grocer').errors?.['required'] && form.get('last_name_grocer').touched"
+                                    class="message-invalid">
+                                    <p style="color: red;">El apellido es requerido.</p>
+                                </div>
+                            </div>
+
+
+                            <div class="d-flex gap-2">
+                                <div class="form-outline mb-4">
+                                    <label class="form-label" for="form1Example13"><strong>Documento</strong></label>
+                                    <input type="text" formControlName="document_grocer"
+                                        class="form-control form-control-lg" />
+
+                                    <div *ngIf="form.get('document_grocer').errors?.['required'] && form.get('document_grocer').touched"
+                                        class="message-invalid">
+                                        <p style="color: red;">El documento es requerido.</p>
+                                    </div>
+
+
+                                    <div *ngIf="form.get('document_grocer')?.hasError('minlength') || form.get('document_grocer')?.hasError('maxlength')"
+                                        class="message-invalid">
+                                        <p style="color: red;">El documento debe tener entre 10 a maximo 15 carácteres
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="form-outline mb-4">
+                                    <label class="form-label" for="form1Example13"><strong>Correo</strong></label>
+                                    <input type="email" formControlName="email_grocer"
+                                        class="form-control form-control-lg" />
+                                    <div *ngIf="form.get('email_grocer').errors?.['required'] && form.get('email_grocer').touched"
+                                        class="message-invalid">
+                                        <p style="color: red;">El correo electrónico es requerido.</p>
+                                    </div>
+                                    <div *ngIf="form.get('email_grocer').errors?.['email'] && form.get('email_grocer').touched && form.get('document_grocer').errors?.['required']"
+                                        class="message-invalid">
+                                        <p style="color: red;">Por favor, ingrese un correo electrónico válido.</p>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="d-flex gap-2">
+                                <div class="form-outline mb-4">
+                                    <label class="form-label" for="form1Example13"><strong>N. celular</strong></label>
+                                    <input type="tel" formControlName="number_grocer"
+                                        class="form-control form-control-lg" />
+
+                                    <div *ngIf="form.get('number_grocer').errors?.['required'] && form.get('number_grocer').touched"
+                                        class="message-invalid">
+                                        <p style="color: red;">El numero es requerido.</p>
+                                    </div>
+
+                                    <div *ngIf="form.get('number_grocer')?.hasError('minlength') || form.get('number_grocer')?.hasError('maxlength')"
+                                        class="message-invalid">
+                                        <p style="color: red;">El numero debe tener entre 1 a maximo 15 carácteres
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="form-outline mb-4">
+                                    <label class="form-label" for="form1Example13"><strong>Nombre del
+                                            establecimiento</strong></label>
+                                    <input type="text" formControlName="name_store"
+                                        class="form-control form-control-lg" />
+
+                                    <div *ngIf="form.get('name_store').errors?.['required'] && form.get('name_store').touched"
+                                        class="message-invalid">
+                                        <p style="color: red;">El nombre del establecimiento es requerido.</p>
+                                    </div>
+
+                                    <div *ngIf="form.get('document_grocer')?.hasError('minlength') || form.get('document_grocer')?.hasError('maxlength')"
+                                        class="message-invalid">
+                                        <p style="color: red;">El nombre del establecimiento debe tener entre 10 a
+                                            máximo 50 carácteres
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <div class="div">
+                                    <label for="exampleFormControlTextarea1"
+                                        class="form-label"><strong>Departamento</strong></label>
+                                    <select formControlName="department" class="form-control form-control-lg"
+                                        (ngModelChange)="selected_department($event)">
+                                        <option value="" disabled selected>Seleccione un departamento</option>
+                                        <option *ngFor="let department of departments"
+                                            [ngValue]="{id: department.id, name: department.name}">
+                                            {{ department.name }}
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <div class="div">
+                                    <label for="exampleFormControlTextarea1"
+                                        class="form-label"><strong>Municipio</strong></label>
+                                    <select formControlName="city" class="form-control form-control-lg">
+                                        <option value="" disabled selected>Seleccione el municipio</option>
+                                        <option *ngFor="let city of cities" [value]="city.name">{{
+                                            city.name }}</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-outline mb-4">
+                                    <label class="form-label" for="form1Example13"><Strong>Barrio</Strong></label>
+                                    <input type="text" formControlName="neighborhood"
+                                        class="form-control form-control-lg" />
+
+                                    <div *ngIf="form.get('neighborhood').errors?.['required'] && form.get('neighborhood').touched"
+                                        class="message-invalid">
+                                        <p style="color: red;">El Barrio es requerido.</p>
+                                    </div>
+
+                                    <div *ngIf="form.get('neighborhood')?.hasError('minlength') || form.get('neighborhood')?.hasError('maxlength')"
+                                        class="message-invalid">
+                                        <p style="color: red;">El nombre barrio debe tener entre 1 a
+                                            máximo 30 carácteres
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <div class="form-outline mb-4">
+                                    <label class="form-label" for="form1Example13"><strong>Calle</strong></label>
+                                    <input type="text" formControlName="street" class="form-control form-control-lg" />
+
+
+                                    <div *ngIf="form.get('street').errors?.['required'] && form.get('street').touched"
+                                        class="message-invalid">
+                                        <p style="color: red;">La calle es requerida.</p>
+                                    </div>
+                                </div>
+
+                                <div class="form-outline mb-4">
+                                    <label class="form-label" for="form1Example13"><strong> Numero de
+                                            calle</strong></label>
+                                    <input type="text" formControlName="number_street"
+                                        class="form-control form-control-lg" />
+
+                                    <div *ngIf="form.get('number_street').errors?.['required'] && form.get('number_street').touched"
+                                        class="message-invalid">
+                                        <p style="color: red;">El numero de calle es requerida.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex gap-2">
+
+                                <div class="form-outline mb-4">
+                                    <label class="form-label" for="form1Example13"><strong> Contraseña</strong></label>
+                                    <input type="password" formControlName="password_grocer"
+                                        class="form-control form-control-lg" />
+
+                                    <div *ngIf="form.get('password_grocer').errors?.['required'] && form.get('password_grocer').touched"
+                                        class="message-invalid">
+                                        <p style="color: red;">La contraseña es requerida.</p>
+                                    </div>
+
+                                    <div *ngIf="form.get('password_grocer')?.hasError('minlength') || form.get('password_grocer')?.hasError('maxlength')"
+                                        class="message-invalid">
+                                        <p style="color: red;">La contraseña debe tener minimo 8 carácteres</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Submit button -->
+                            <button type="submit"
+                                class="btn btn-primary btn-lg btn-block d-grid gap-2 col-6 mx-auto border border-0"
+                                type="submit" style="background-color: orange;">Registrar</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </form>
+    </div>
+</div>
+
+
+
+<div class="modal" *ngIf="loading">
+    <div class="modal-content">
+        <app-loader [loading]="loading"></app-loader>
+    </div>
+</div>

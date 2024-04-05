@@ -1,0 +1,398 @@
+<div class="container">
+
+    <div class="offcanvas offcanvas-end btn-bg bg_color" tabindex=" -1" id="offcanvasRight"
+        aria-labelledby="offcanvasRightLabel">
+        <div class="offcanvas-header bg-danger d-flex justify-content-end">
+            <!-- <button type=" button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close">
+                <i class="fa-solid fa-x" style="color: #ffffff;"></i>
+            </button> -->
+            <button type=" button" class="bg-transparent border-0" data-bs-dismiss="offcanvas">
+                <i class="fa-solid fa-x" style="color: #ffffff;"></i>
+            </button>
+        </div>
+        <div class="offcanvas-body">
+            <div *ngIf="(auth.isGrocer() | async) || !(auth.isLoggedIn() | async)">
+                <div *ngIf="!(auth.isLoggedIn() | async)" class="d-flex flex-column">
+                    <div class="d-flex flex-column align-items-left gap-3">
+                        <a target="_top" routerLink="login" class="text-light">Iniciar sesión</a>
+                        <a target="_top" routerLink="register" class="text-light">Registrarse</a>
+                    </div>
+                    <hr class="text-light">
+                    <div class="d-flex flex-column align-items-left gap-3">
+                        <a target="_top" routerLink="/"><i class="fa-solid fa-house" style="color: #ffffff;"></i>
+                            Inicio</a>
+                        <a target="_parent" (click)="searchCompanies()" style="color: #ffffff; cursor: pointer;"><i
+                                class="fa-solid fa-building" style="color: #ffffff;"></i>
+                            Ver empresas</a>
+                        <a target="_parent" (click)="searchProducts()" style="color: #ffffff; cursor: pointer;"><i
+                                class="fa-solid fa-basket-shopping" style="color: #ffffff;"></i>
+                            Ver productos</a>
+                    </div>
+                    <hr class="text-light">
+                    <div *ngIf="!(auth.isLoggedIn() | async)" class="col-auto">
+                        <form class="d-flex gap-4" [formGroup]="form_location" (ngSubmit)="filter_location()">
+                            <div class="location d-flex flex-column align-items-start gap-2">
+                                <!-- <i class="fa-solid fa-location-dot" style="color: #ffffff;"></i> -->
+                                <h6 class="text-light">Ubicación</h6>
+                                <div class="d-flex bg-light">
+                                    <div class="department">
+                                        <select formControlName="department"
+                                            (ngModelChange)="selected_department($event)" class="form-select">
+                                            <option value="" disabled selected>Seleccionar</option>
+                                            <option *ngFor="let department of departments" [ngValue]="department.name">
+                                                {{ department.name }}
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="city">
+                                        <select formControlName="city" class="form-select">
+                                            <option value="" disabled selected>Seleccionar</option>
+                                            <option *ngFor="let city of cities" [value]="city.name">{{ city.name }}
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <button type="submit" class="btn bg-danger text-light rounded-0">
+                                        Cambiar
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div *ngIf="auth.isLoggedIn() | async" class="d-flex flex-column gap-5">
+                    <div class="" *ngIf="auth.isLoggedIn() | async">
+                        <div class="d-flex flex-column align-items-left gap-3">
+                            <a target="_top" routerLink="/"><i class="fa-solid fa-house" style="color: #ffffff;"></i>
+                                Inicio</a>
+                            <a target="_parent" (click)="searchCompanies()" style="color: #ffffff; cursor: pointer;"><i
+                                    class="fa-solid fa-building" style="color: #ffffff;"></i>
+                                Ver empresas</a>
+                            <a target="_parent" (click)="searchProducts()" style="color: #ffffff; cursor: pointer;"><i
+                                    class="fa-solid fa-basket-shopping" style="color: #ffffff;"></i>
+                                Ver productos</a>
+                            <!-- <a target="_top" routerLink="/view/price/products"><i class="fa-solid fa-dollar-sign"
+                                    style="color: #ffffff;"></i>
+                                Ver precios sugeridos</a> -->
+                            <a target="_top" routerLink="/create/order"><i class="fa-solid fa-clipboard"
+                                    style="color: #fcfcfc;"></i>
+                                Crear pedido</a>
+                            <a target="_top" routerLink="/view/orders"><i class="fa-solid fa-book"
+                                    style="color: #ffffff;"></i>
+                                Ver pedidos</a>
+                        </div>
+                        <hr class="text-light">
+                        <div class="d-flex flex-column align-items-left gap-3">
+                            <!-- <h5 class="text-light">Perfil</h5> -->
+                            <a target="_top" class="text-light" routerLink="profile">Ver
+                                perfil</a>
+                            <a target="_top" class="text-light" role="button" (click)="update_profile()">Editar
+                                perfil</a>
+                            <a target="_top" class="text-light" role="button" (click)="auth.logout()">Cerrar sesión</a>
+                        </div>
+                        <hr class="text-light">
+                        <div *ngIf="auth.isLoggedIn() | async" class="col-auto d-lg-inline">
+                            <div class="location d-flex align-items-center gap-2">
+                                <i class="fa-solid fa-location-dot" style="color: #ffffff;"></i>
+                                <div class=" d-flex gap-3 text-light">
+                                    <span>{{data_user?.department}}</span>
+                                    <span>|</span>
+                                    <span>{{data_user?.city_grocer}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div *ngIf="(auth.isCompany() | async) || (auth.isProvider() | async)" class="d-flex flex-column gap-5">
+                <div class="d-flex flex-column">
+                    <div class="d-flex flex-column align-items-left gap-3">
+                        <a target="_top" routerLink="/panel"><i class="fa-solid fa-table-columns"
+                                style="color: #ffffff;"></i>
+                            Panel</a>
+                        <a target="_top" *ngIf="auth.isCompany() | async" routerLink="/manage/products"><i
+                                class="fa-solid fa-house" style="color: #ffffff;"></i>
+                            Productos</a>
+                        <a target="_top" routerLink="/manage/orders"><i class="fa-solid fa-book"
+                                style="color: #ffffff;"></i>
+                            Pedidos</a>
+                        <a target="_top" *ngIf="auth.isCompany() | async" routerLink="manage/providers"><i
+                                class="fa-solid fa-people-group" style="color: #ffffff;"></i>
+                            Trabajadores</a>
+                        <a target="_top" *ngIf="auth.isCompany() | async" routerLink="/manage/publications"><i
+                                class="fa-solid fa-image" style="color: #ffffff;"></i>
+                            Publicaciones</a>
+                        <a target="_top" *ngIf="auth.isProvider() | async" routerLink="/view/grocers"><i
+                                class="fa-solid fa-people-line" style="color: #ffffff;"></i>
+                            Ver tenderos</a>
+                        <a target="_top" *ngIf="auth.isProvider() | async" role="button" style="color: #ffffff;"
+                            (click)="viewCompany(data.fk_nit_company)"><i class="fa-solid fa-building"></i>
+                            Ver empresa</a>
+                        <a target="_top" *ngIf="auth.isProvider() | async" role="button" style="color: #ffffff;"
+                            (click)="viewProducts(data.fk_nit_company)"><i class="fa-solid fa-basket-shopping"></i>
+                            Ver productos</a>
+                    </div>
+                    <hr class="text-light">
+                    <div class="d-flex flex-column align-items-left gap-3">
+                        <!-- <h5 class="text-light">Perfil</h5> -->
+                        <a target="_top" class="text-light" routerLink="profile">Ver
+                            perfil</a>
+                        <a target="_top" class="text-light" *ngIf="auth.isCompany() | async" role="button"
+                            (click)="update_profile()">Editar
+                            perfil</a>
+                        <a target="_top" class="text-light" role="button" (click)="auth.logout()">Cerrar sesión</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <nav class="navbar navbar-expand-lg navbar-light flex-column gap-2"
+        *ngIf="(auth.isGrocer() | async) || !(auth.isLoggedIn() | async)">
+
+        <div class="row w-100 justify-content-between align-items-center gap-4">
+
+            <div class="col-auto d-flex align-items-center gap-1">
+                <i class="fa-solid fa-store" style="color: #ffffff; font-size: 32px;"></i>
+                <a class="fs-2 text-light " routerLink="/">
+                    ProveerTen</a>
+            </div>
+
+            <div class="col-1 d-sm-flex d-md-none">
+                <button class="bg-transparent border-0" type="button" data-bs-toggle="offcanvas"
+                    data-bs-target="#offcanvasRight" aria-controls="offcanvasRight"><i class="fa-solid fa-bars"
+                        style="color: #ffffff;"></i>
+                </button>
+            </div>
+
+            <div class="col-12 d-flex justify-content-center bg-light p-0 col-md-6 col-lg-5">
+                <form [formGroup]="form" (ngSubmit)="search()" class="w-100">
+                    <div class="div_search d-flex">
+                        <div class="selection w-50">
+                            <select formControlName="searchType" class="form-select border-0 border-warning"
+                                (ngModelChange)="onSearchTypeChange($event)">
+                                <option [value]="'products'" [selected]="form.get('searchType').value === 'products'">
+                                    Productos
+                                </option>
+                                <option [value]="'companies'" [selected]="form.get('searchType').value === 'companies'">
+                                    Compañías
+                                </option>
+                            </select>
+                        </div>
+                        <div class="search d-flex w-100">
+                            <input type="search" placeholder="Buscar..." (input)="onSearchInput()"
+                                formControlName="searchTerm" class="form-control">
+                            <button class="btn bg-danger send_search rounded-0" type="submit">
+                                <i class="fa-solid fa-magnifying-glass" style="color: #ffffff;"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="col-1 d-none d-md-flex d-lg-none">
+                <button class="bg-transparent border-0" type="button" data-bs-toggle="offcanvas"
+                    data-bs-target="#offcanvasRight" aria-controls="offcanvasRight"><i class="fa-solid fa-bars"
+                        style="color: #ffffff;"></i>
+                </button>
+            </div>
+
+            <div class="col-auto d-none d-lg-flex col-lg-auto justify-content-between">
+                <div class="d-flex gap-3">
+                    <a *ngIf="!(auth.isLoggedIn() | async)" routerLink="login" class="text-light">Iniciar sesión</a>
+                    <a *ngIf="!(auth.isLoggedIn() | async)" routerLink="register" class="text-light">Registrarse</a>
+                </div>
+                <div class="dropdown d-none d-lg-inline" *ngIf="auth.isLoggedIn() | async">
+                    <button class="btn bg-danger text-light dropdown-toggle" type="button" id="profileMenuButton"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        <span class="span"><svg xmlns="" fill="none" viewBox="0 0 23 21" height="21" width="23"
+                                class="svg-icon">
+                                <path stroke-linejoin="round" stroke-linecap="round" stroke-width="2" stroke="white"
+                                    d="M1.97742 19.7776C4.45061 17.1544 7.80838 15.5423 11.5068 15.5423C15.2053 15.5423 18.5631 17.1544 21.0362 19.7776M16.2715 6.54229C16.2715 9.17377 14.1383 11.307 11.5068 11.307C8.87535 11.307 6.74212 9.17377 6.74212 6.54229C6.74212 3.91082 8.87535 1.77759 11.5068 1.77759C14.1383 1.77759 16.2715 3.91082 16.2715 6.54229Z">
+                                </path>
+                            </svg></span> Perfil
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="profileMenuButton">
+                        <li *ngIf="auth.isLoggedIn() | async"><a class="dropdown-item text-black"
+                                routerLink="profile">Ver
+                                perfil</a></li>
+                        <li *ngIf="auth.isGrocer() | async"><a class="dropdown-item text-black"
+                                (click)="update_profile()" role="button">Editar perfil</a></li>
+                        <hr>
+                        <li *ngIf="auth.isLoggedIn() | async"><a class="dropdown-item text-danger"
+                                (click)="auth.logout()" role="button">Cerrar sesión</a></li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row w-100 justify-content-left align-items-center gap-4 d-none d-lg-flex pt-2">
+            <div class="col-auto elements d-flex gap-4 flex-wrap" *ngIf="auth.isLoggedIn() | async">
+                <a routerLink="/"><i class="fa-solid fa-house" style="color: #ffffff;"></i> Inicio</a>
+                <a (click)="searchCompanies()" style="color: #ffffff; cursor: pointer;"><i class="fa-solid fa-building"
+                        style="color: #ffffff;"></i>
+                    Ver empresas</a>
+                <a (click)="searchProducts()" style="color: #ffffff; cursor: pointer;"><i
+                        class="fa-solid fa-basket-shopping" style="color: #ffffff;"></i>
+                    Ver productos</a>
+                <!-- <a routerLink="/view/price/products"><i class="fa-solid fa-dollar-sign" style="color: #ffffff;"></i>
+                    Ver precios sugeridos</a> -->
+                <a routerLink="/create/order"><i class="fa-solid fa-clipboard" style="color: #fcfcfc;"></i>
+                    Crear pedido</a>
+                <a routerLink="/view/orders"><i class="fa-solid fa-book" style="color: #ffffff;"></i>
+                    Ver pedidos</a>
+            </div>
+
+            <div class="col-auto elements d-flex gap-5 d-none d-lg-flex" *ngIf="!(auth.isLoggedIn() | async)">
+                <a routerLink="/"><i class="fa-solid fa-house" style="color: #ffffff;"></i> Inicio</a>
+                <a (click)="searchCompanies()" style="color: #ffffff; cursor: pointer;"><i class="fa-solid fa-building"
+                        style="color: #ffffff;"></i>
+                    Encontrar empresas</a>
+                <a (click)="searchProducts()" style="color: #ffffff; cursor: pointer;"><i
+                        class="fa-solid fa-basket-shopping" style="color: #ffffff;"></i>
+                    Encontrar productos</a>
+            </div>
+        </div>
+
+        <div class=" row w-100 justify-content-end align-items-center gap-4 d-none d-lg-flex">
+            <div *ngIf="!(auth.isLoggedIn() | async)" class="col-auto">
+                <form class="d-flex gap-4" [formGroup]="form_location" (ngSubmit)="filter_location()">
+                    <div class="location d-flex align-items-center gap-2">
+                        <i class="fa-solid fa-location-dot" style="color: #ffffff;"></i>
+                        <div class="elements_location d-flex bg-light">
+                            <div class="department">
+                                <select formControlName="department" (ngModelChange)="selected_department($event)"
+                                    class="form-select">
+                                    <option value="" disabled selected>Seleccionar</option>
+                                    <option *ngFor="let department of departments" [ngValue]="department.name">
+                                        {{ department.name }}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="city">
+                                <select formControlName="city" class="form-select">
+                                    <option value="" disabled selected>Seleccionar</option>
+                                    <option *ngFor="let city of cities" [value]="city.name">{{ city.name }}</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn bg-danger text-light rounded-0">
+                                Cambiar
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div *ngIf="auth.isLoggedIn() | async" class="col-auto d-lg-inline">
+                <div class="location d-flex align-items-center gap-2">
+                    <i class="fa-solid fa-location-dot" style="color: #ffffff;"></i>
+                    <div class=" d-flex gap-3 text-light">
+                        <span>{{data_user?.department}}</span>
+                        <span>|</span>
+                        <span>{{data_user?.city_grocer}}</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </nav>
+
+    <nav class="navbar navbar-expand-lg navbar-light flex-column gap-4"
+        *ngIf="((auth.isCompany() | async ) || (auth.isProvider() | async))">
+        <div class="row w-100 justify-content-between align-items-center gap-3">
+
+            <div class="col-auto d-flex align-items-center gap-1">
+                <i class="fa-solid fa-store" style="color: #ffffff; font-size: 32px;"></i>
+                <a class="fs-2 text-light " routerLink="/">
+                    ProveerTen</a>
+            </div>
+
+            <div class="col-1 d-sm-flex d-md-none">
+                <button class="bg-transparent border-0" type="button" data-bs-toggle="offcanvas"
+                    data-bs-target="#offcanvasRight" aria-controls="offcanvasRight"><i class="fa-solid fa-bars"
+                        style="color: #ffffff;"></i>
+                </button>
+            </div>
+
+            <div class="col-auto d-none d-md-flex  d-lg-none">
+                <div class="dropdown" *ngIf="auth.isLoggedIn() | async">
+                    <button class="btn bg-danger text-light dropdown-toggle" type="button" id="profileMenuButton"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        <span class="span"><svg xmlns="" fill="none" viewBox="0 0 23 21" height="21" width="23"
+                                class="svg-icon">
+                                <path stroke-linejoin="round" stroke-linecap="round" stroke-width="2" stroke="white"
+                                    d="M1.97742 19.7776C4.45061 17.1544 7.80838 15.5423 11.5068 15.5423C15.2053 15.5423 18.5631 17.1544 21.0362 19.7776M16.2715 6.54229C16.2715 9.17377 14.1383 11.307 11.5068 11.307C8.87535 11.307 6.74212 9.17377 6.74212 6.54229C6.74212 3.91082 8.87535 1.77759 11.5068 1.77759C14.1383 1.77759 16.2715 3.91082 16.2715 6.54229Z">
+                                </path>
+                            </svg></span> Perfil
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="profileMenuButton">
+                        <li><a class="dropdown-item text-black" routerLink="profile">Ver
+                                perfil</a></li>
+                        <li *ngIf="auth.isCompany() | async"><a class="dropdown-item text-black"
+                                (click)="update_profile()" role="button">Editar perfil</a></li>
+                        <hr>
+                        <li><a class="dropdown-item text-danger" (click)="auth.logout()" role="button">Cerrar sesión</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-auto d-none d-lg-flex">
+                <div class="dropdown" *ngIf="auth.isLoggedIn() | async">
+                    <button class="btn bg-danger text-light dropdown-toggle" type="button" id="profileMenuButton"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        <span class="span"><svg xmlns="" fill="none" viewBox="0 0 23 21" height="21" width="23"
+                                class="svg-icon">
+                                <path stroke-linejoin="round" stroke-linecap="round" stroke-width="2" stroke="white"
+                                    d="M1.97742 19.7776C4.45061 17.1544 7.80838 15.5423 11.5068 15.5423C15.2053 15.5423 18.5631 17.1544 21.0362 19.7776M16.2715 6.54229C16.2715 9.17377 14.1383 11.307 11.5068 11.307C8.87535 11.307 6.74212 9.17377 6.74212 6.54229C6.74212 3.91082 8.87535 1.77759 11.5068 1.77759C14.1383 1.77759 16.2715 3.91082 16.2715 6.54229Z">
+                                </path>
+                            </svg></span> Perfil
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="profileMenuButton">
+                        <li><a class="dropdown-item text-black" routerLink="profile">Ver
+                                perfil</a></li>
+                        <li *ngIf="auth.isCompany() | async"><a class="dropdown-item text-black"
+                                (click)="update_profile()" role="button">Editar perfil</a></li>
+                        <hr>
+                        <li><a class="dropdown-item text-danger" (click)="auth.logout()" role="button">Cerrar sesión</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row d-flex justify-content-left w-100">
+            <div class=" col-auto d-none d-md-flex">
+                <div class="d-flex gap-4 flex-wrap" *ngIf="auth.isLoggedIn() | async">
+                    <a routerLink="/panel"><i class="fa-solid fa-table-columns" style="color: #ffffff;"></i>
+                        Panel</a>
+                    <a *ngIf="auth.isCompany() | async" routerLink="/manage/products"><i
+                            class="fa-solid fa-basket-shopping" style="color: #ffffff;"></i>
+                        Productos</a>
+                    <a routerLink="/manage/orders"><i class="fa-solid fa-book" style="color: #ffffff;"></i>
+                        Pedidos</a>
+                    <a *ngIf="auth.isCompany() | async" routerLink="manage/providers"><i
+                            class="fa-solid fa-people-group" style="color: #ffffff;"></i>
+                        Trabajadores</a>
+                    <a *ngIf="auth.isCompany() | async" routerLink="/manage/publications"><i class="fa-solid fa-image"
+                            style="color: #ffffff;"></i>
+                        Publicaciones</a>
+                    <a *ngIf="auth.isProvider() | async" routerLink="/view/grocers"><i class="fa-solid fa-people-line"
+                            style="color: #ffffff;"></i>
+                        Ver tenderos</a>
+                    <a *ngIf="auth.isProvider() | async" role="button" style="color: #ffffff;"
+                        (click)="viewCompany(data.fk_nit_company)"><i class="fa-solid fa-building"></i>
+                        Ver empresa</a>
+                    <a *ngIf="auth.isProvider() | async" role="button" style="color: #ffffff;"
+                        (click)="viewProducts(data.fk_nit_company)"><i class="fa-solid fa-basket-shopping"></i>
+                        Ver productos</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+</div>

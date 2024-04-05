@@ -1,0 +1,450 @@
+<div class="modal" *ngIf="loading">
+    <div class="modal-content">
+        <app-loader [loading]="loading"></app-loader>
+    </div>
+</div>
+
+<div class="div" *ngIf="auth.isCompany() | async">
+    <section style="background-color: #eee;">
+        <div class="container w-100 py-5">
+            <div class="row d-flex d-flex justify-content-center">
+                <div class="col-lg-4">
+                    <div class="card mb-4">
+                        <div class="card-body text-center">
+                            <img appBrokenImageProfile [imageType]="'photo'" [src]="data?.profile_photo_company"
+                                style="width: 200px; height: 168px;" alt="avatar" class="rounded-circle img-fluid">
+                            <h5 class="my-3">{{data?.name_company}}</h5>
+                            <!-- <p class="text-muted mb-1">{{data?.description_company}}</p> -->
+                            <div class="d-flex justify-content-center mb-2">
+                                <div class="d-flex justify-content-center gap-3 mt-2 flex-xxl-column">
+                                    <div
+                                        class="d-flex justify-content-center gap-3 mt-2 flex-column align-items-center">
+
+                                        <div class="d-flex gap-2">
+                                            <button class="btn btn-primary" (click)="updatePhoto()">Actualizar</button>
+                                            <button class="btn btn-danger" *ngIf="data?.profile_photo_company"
+                                                (click)="deleteValue('profile_photo')">Eliminar foto</button>
+                                        </div>
+
+                                        <form (ngSubmit)="onSubmitPhoto()">
+                                            <div class="mb-3 d-flex gap-2" *ngIf="photo">
+                                                <input class="form-control" type="file" id="formFile"
+                                                    (change)="onFileSelected($event)">
+                                                <button class="btn btn-primary" type="submit"
+                                                    [disabled]="!isValidImage">Enviar</button>
+                                            </div>
+                                        </form>
+                                        <button class="btn btn-primary" *ngIf="photo"
+                                            (click)="cancelPhoto()">Cancelar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--  -->
+                    <div class="card mb-4 mb-lg-0">
+                        <div class="d-flex justify-content-center p-3">
+
+                            <button type="button" class="button" (click)="addSocialRed()" *ngIf="inputLinkRed">
+                                <span class="button__text">Red social</span>
+                                <span class="button__icon"><svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                        viewBox="0 0 24 24" stroke-width="2" stroke-linejoin="round"
+                                        stroke-linecap="round" stroke="currentColor" height="24" fill="none"
+                                        class="svg">
+                                        <line y2="19" y1="5" x2="12" x1="12"></line>
+                                        <line y2="12" y1="12" x2="19" x1="5"></line>
+                                    </svg></span>
+                            </button>
+
+                            <!-- <button (click)="updateSocialRed()" *ngIf="dataSocialReds.length > 0" >Actualizar red social</button> -->
+
+                            <div class="d-flex justify-content-between">
+
+                                <div class="d-flex flex-column">
+                                    <input type="text" class="form-control" aria-label="Sizing example input"
+                                        aria-describedby="inputGroup-sizing-default" (input)="valueRed($event)"
+                                        *ngIf="!inputLinkRed">
+
+                                    <div class="d-flex justify-content-center">
+                                        <span [innerHTML]="iconSocialRed" [style]="colorIcon"
+                                            *ngIf="iconSocialRed"></span>
+                                    </div>
+
+                                </div>
+
+                                <div *ngIf="!inputLinkRed">
+                                    <button (click)="showModalIcons()" *ngIf="estadoModalIcons"><i
+                                            class="fa-solid fa-chevron-right"></i></button>
+                                    <button (click)="showModalIcons()" *ngIf="!estadoModalIcons"><i
+                                            class="fa-solid fa-chevron-left"></i></button>
+                                </div>
+
+                            </div>
+                        </div>
+                        <form (ngSubmit)="onSubmitSocialRed()">
+
+                            <div class="d-flex justify-content-center gap-2 p-2">
+
+
+                                <button class="btn btn-danger" (click)="addSocialRed()"
+                                    *ngIf="!inputLinkRed">Cancelar</button>
+
+                                <button class="btn btn-primary" type="submit" *ngIf="!inputLinkRed"
+                                    (input)="!validOnSubmit()" [disabled]="!valid">Enviar</button>
+                            </div>
+
+                        </form>
+
+                        <div *ngIf="!estadoModalIcons">
+                            <div *ngIf="!inputLinkRed">
+                                <div class="d-flex flex-column p-3">
+                                    <p><strong>Escoje un icono para tu red social</strong></p>
+
+                                    <div class="modalIcons">
+                                        <span class="span" *ngFor="let icon of OptionsIcons; let i = index"
+                                            [innerHTML]="icon.value" (click)="iconRed(icon.value, icon.color)"
+                                            [style]="icon.color"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="card mb-4 mb-lg-0 p-3">
+                            <div class="d-flex justify-content-center">
+                                <h4>Redes sociales</h4>
+                            </div>
+                            <div class="d-flex justify-content-center flex-wrap gap-4">
+                                <div class="d-flex flex-column align-items-center"
+                                    *ngFor="let red of dataSocialReds; let i = index">
+                                    <a [href]="red.link" target="_blank">
+                                        <span class="span" [innerHTML]="red.icon" [style]="colorsOfIcons[i]"></span>
+                                    </a>
+                                    <i class="fa-regular fa-trash-can" (click)="onDeleteSocialRed(red.id)"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-8">
+
+                    <div class="d-flex flex-column">
+
+                        <div class="cover d-flex flex-column m-2 ">
+                            <div class="d-flex justify-content-center gap-3 mt-2 flex-column">
+                                <img appBrokenImageProfile [imageType]="'cover'" [src]="data?.cover_photo_company"
+                                    style="width: 100%; height: 200px;" class="rounded">
+
+                                <div class="d-flex justify-content-center gap-2">
+                                    <button class="btn btn-primary" (click)="updateCover()">Actualizar</button>
+                                    <button class="btn btn-danger" *ngIf="data?.cover_photo_company"
+                                        (click)="deleteValue('cover_photo')">Eliminar foto de portada</button>
+                                </div>
+                            </div>
+                            <form (ngSubmit)="onSubmitCover()">
+                                <div class="mb-3 d-flex gap-2 mt-2" *ngIf="cover">
+                                    <input class="form-control" type="file" id="formFile"
+                                        (change)="onFileSelected($event)">
+                                    <button class="btn btn-primary" type="submit"
+                                        [disabled]="!isValidImage">Enviar</button>
+                                </div>
+                            </form>
+                            <button class="btn btn-primary" *ngIf="cover" (click)="cancelCover()">Cancelar</button>
+                        </div>
+
+                    </div>
+                    <div class="card mb-4">
+
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Descripcion</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0">{{data?.description_company}}</p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Fecha de fundación</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0">{{data?.foundation_company}}</p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Linea nacional</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0">{{data?.national_line_company}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 d-flex gap-3 w-100 flex-xxl-column flex-wrap"
+                        *ngIf="publications; else noPublications">
+                        <div class="card" style="width: 100%; height: 100%;" *ngFor="let publication of publications">
+                            <div class="card-body w-100 d-flex justify-content-center flex-column">
+                                <p>{{publication.date | date}} </p>
+                                <p class="fs-3 bg-light" style="color: black">{{publication?.text}}</p>
+                                <img id="image_publication" [src]="publication.image_url" class="img-fluid">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!-- <ng-template #noPublications>
+            <h1>No hay publicaciones</h1>
+        </ng-template> -->
+    </section>
+</div>
+
+<ng-template #noPublications>
+    <p>No hay publicaciones por mostrar</p>
+</ng-template>
+
+<div class="div" *ngIf="auth.isProvider() | async">
+
+    <section style="background-color: #eee;">
+        <div class="container w-100 py-5">
+            <div class="row d-flex d-flex justify-content-center">
+                <div class="col-lg-4">
+                    <div class="card mb-4">
+                        <div class="card-body text-center">
+                            <img appBrokenImageProfile [imageType]="'photo'" [src]="data?.profile_photo_provider"
+                                style="width: 200px; height: 168px;" alt="avatar" class="rounded-circle img-fluid">
+                            <h5 class="my-3">{{data?.name_provider}} {{data?.last_name_provider}}</h5>
+                            <div class="d-flex justify-content-center mb-2">
+                                <div class="d-flex justify-content-center gap-3 mt-2 flex-xxl-column">
+                                    <div
+                                        class="d-flex justify-content-center gap-3 mt-2 flex-column align-items-center">
+
+                                        <div class="d-flex gap-2">
+                                            <button class="btn btn-primary"
+                                                (click)="updatePhoto()">Actualizar</button>
+                                            <button class="btn btn-danger" *ngIf="data?.profile_photo_provider"
+                                                (click)="deleteValue('profile_photo')">Eliminar foto</button>
+                                        </div>
+
+                                        <form (ngSubmit)="onSubmitPhoto()">
+                                            <div class="mb-3 d-flex gap-2" *ngIf="photo">
+                                                <input class="form-control" type="file" id="formFile"
+                                                    (change)="onFileSelected($event)">
+                                                <button class="btn btn-primary" type="submit"
+                                                    [disabled]="!isValidImage">Enviar</button>
+                                            </div>
+                                        </form>
+                                        <button class="btn btn-primary" *ngIf="photo"
+                                            (click)="cancelPhoto()">Cancelar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-8">
+                    <div class="card mb-4">
+
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Número de teléfono</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0">{{data?.number_provider}}</p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Ciudad</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0">{{data?.city_provider}}</p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Barrio</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0">{{data?.neighborhood}}</p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Calle</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0">{{data?.neighborhood}}</p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Número de calle</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0">{{data?.number_street}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<div class="div" *ngIf="auth.isGrocer() | async">
+    <section style="background-color: #eee;">
+        <div class="container w-100 py-5">
+            <div class="row d-flex d-flex justify-content-center">
+                <div class="col-lg-4">
+                    <div class="card mb-4">
+                        <div class="card-body text-center">
+                            <img appBrokenImageProfile [imageType]="'photo'" [src]="data?.profile_photo_grocer"
+                                style="width: 200px; height: 168px;" alt="avatar" class="rounded-circle img-fluid">
+                            <h5 class="my-3">{{data?.name_grocer}} {{data?.last_name_grocer}}</h5>
+                            <div class="d-flex justify-content-center mb-2">
+                                <div class="d-flex justify-content-center gap-3 mt-2 flex-xxl-column">
+                                    <div
+                                        class="d-flex justify-content-center gap-3 mt-2 flex-column align-items-center">
+
+                                        <div class="d-flex gap-2">
+                                            <button class="btn btn-primary" (click)="updatePhoto()">Actualizar</button>
+                                            <button class="btn btn-primary" *ngIf="data?.profile_photo_grocer"
+                                                (click)="deleteValue('profile_photo')">Eliminar foto</button>
+                                        </div>
+
+                                        <form (ngSubmit)="onSubmitPhoto()">
+                                            <div class="mb-3 d-flex gap-2" *ngIf="photo">
+                                                <input class="form-control" type="file" id="formFile"
+                                                    (change)="onFileSelected($event)">
+                                                <button class="btn btn-primary" type="submit"
+                                                    [disabled]="!isValidImage">Enviar</button>
+                                            </div>
+                                        </form>
+                                        <button class="btn btn-primary" *ngIf="photo"
+                                            (click)="cancelPhoto()">Cancelar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-8">
+
+                    <div class="d-flex flex-column">
+
+                        <div class="cover d-flex flex-column m-2 ">
+                            <div class="d-flex justify-content-center gap-3 mt-2 flex-column">
+                                <img appBrokenImageProfile [imageType]="'cover'" [src]="data?.cover_photo_grocer"
+                                    style="width: 100%; height: 200px;" class="rounded">
+
+                                <div class="d-flex justify-content-center gap-2">
+                                    <button class="btn btn-primary" (click)="updateCover()">Actualizar</button>
+                                    <button class="btn btn-danger" *ngIf="data?.cover_photo_grocer"
+                                        (click)="deleteValue('cover_photo')">Eliminar cover</button>
+                                </div>
+                            </div>
+                            <form (ngSubmit)="onSubmitCover()">
+                                <div class="mb-3 d-flex gap-2 mt-2" *ngIf="cover">
+                                    <input class="form-control" type="file" id="formFile"
+                                        (change)="onFileSelected($event)">
+                                    <button class="btn btn-primary" type="submit"
+                                        [disabled]="!isValidImage">Enviar</button>
+                                </div>
+                            </form>
+                            <button class="btn btn-primary" *ngIf="cover" (click)="cancelCover()">Cancelar</button>
+                        </div>
+
+                    </div>
+                    <div class="card mb-4">
+
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Nombre del establecimiento</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0">{{data?.name_store}}</p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Número de teléfono</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0">{{data?.number_grocer}}</p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Departamento</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0">{{data?.department}}</p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Ciudad</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0">{{data?.city_grocer}}</p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Barrio</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0">{{data?.neighborhood}}</p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Calle</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0">{{data?.street}}</p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Número de calle</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0">{{data?.number_street}}</p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div *ngIf="data?.apartment" class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Apartamento</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0">{{data?.apartment}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

@@ -1,0 +1,52 @@
+/* You can add global styles to this file, and also import other style files */
+@import "primeng/resources/themes/lara-light-blue/theme.css";
+@import "primeng/resources/primeng.css";
+
+/* @import url('https://fonts.googleapis.com/css2?family=Catamaran:wght@100..900&display=swap');*/
+
+body {
+  background-color: rgb(240, 240, 240);
+}
+
+/*
+*{
+    font-family: "Catamaran", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 900;
+  font-style: normal;
+}*/
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap');
+
+* {
+  font-family: "Quicksand", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+}
+
+:root {
+  --bs-primary: #E66D3D;
+  --bs-primary-rgb: 230, 109, 61;
+}
+
+.btn.btn-primary {
+  background: #ec8f6a;
+  border-color: #ec8f6a;
+  color: #fff;
+}
+
+.btn.btn-primary:hover,
+.btn.btn-primary:focus {
+
+  border-color: #e66d3d !important;
+  background: #e66d3d !important;
+}
+
+.btn-block {
+  display: block;
+  width: 35%;
+}
+
+.btn-block+.btn-block {
+  margin-top: 0.5rem;
+}

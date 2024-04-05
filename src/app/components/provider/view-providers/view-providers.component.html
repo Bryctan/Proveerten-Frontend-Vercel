@@ -1,0 +1,20 @@
+<div *ngFor="let provider of data">
+    <table border="2px" class="container">
+        <tr>
+            <th>Documento</th>
+            <th>Nombre</th>
+            <th>Ciudad</th>
+        </tr>
+        <tr>
+            <td>
+                {{provider?.document_provider}}
+            </td>
+            <td>
+                {{provider?.name_provider}}
+            </td>
+            <td>
+                {{provider?.city_provider}}
+            </td>
+        </tr>
+    </table>
+</div>

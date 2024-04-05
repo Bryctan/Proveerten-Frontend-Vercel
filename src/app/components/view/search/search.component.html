@@ -1,0 +1,47 @@
+<div class="container mt-5">
+    <div class="row justify-content-between">
+        <div class="col-md-4" style="padding-bottom: 50px;">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="card-title mb-0">Categorías</h5>
+                </div>
+                <div class="card-body">
+                    <input type="text" class="form-control mb-2" placeholder="Buscar categoría"
+                        [(ngModel)]="valueCategory" (input)="searchCategory()">
+                    <div style="max-height: 300px; overflow-y: auto;">
+                        <div *ngFor="let category of categories" class="form-check">
+                            <input type="checkbox" class="form-check-input" [ngModel]="category.isSelected"
+                                (click)="updateSelectionCategory(category.name_category)">
+                            <label class="form-check-label">{{ category.name_category }}</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card mt-4" *ngIf="selectedCategory">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="card-title mb-0">Subcategorías</h5>
+                </div>
+                <div class="card-body">
+                    <div *ngFor="let subCategory of subCategories" class="form-check">
+                        <input type="checkbox" class="form-check-input" [(ngModel)]="subCategory.isSelected"
+                            (click)="updateSelectionSubCategory(subCategory.name_subcategory)">
+                        <label class="form-check-label">{{ subCategory.name_subcategory }}</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="container">
+                <div *ngIf="type === 'products'">
+                    <div>
+                        <app-view-all-products></app-view-all-products>
+
+                    </div>
+                </div>
+                <div *ngIf="type === 'companies'">
+                    <app-view-all-companies></app-view-all-companies>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

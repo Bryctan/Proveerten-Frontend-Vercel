@@ -1,0 +1,32 @@
+.offcanvas {
+    max-width: none;
+    width: 800px;
+}
+
+.offcanvas.offcanvas-bottom {
+    left: auto;
+    border-top: none;
+}
+
+#nav {
+    background: rgb(255, 49, 49);
+    background: linear-gradient(40deg, rgba(255, 49, 49, 1) 0%, rgba(255, 145, 77, 1) 100%);
+}
+
+.offcanvas {
+    --bs-offcanvas-height: none;
+    width: 100%;
+}
+
+.offcanvas-body {
+    overflow-y: hidden;
+    padding: 0px;
+}
+
+@media (min-width: 768px) {
+
+    .offcanvas {
+        width: 50%;
+    }
+
+}
